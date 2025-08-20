@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+#if SKETCH_USE_SWIFT_MACROS
 /**
  Macros for the Model Context Protocol (MCP).
 
@@ -94,3 +94,4 @@ public macro MCPResource<T>(_ template: T, name: String? = nil, mimeType: String
 
 @attached(peer, names: prefixed(__mcpPromptMetadata_), prefixed(__mcpPromptCall_))
 public macro MCPPrompt(description: String? = nil) = #externalMacro(module: "SwiftMCPMacros", type: "MCPPromptMacro")
+#endif // SKETCH_USE_SWIFT_MACROS

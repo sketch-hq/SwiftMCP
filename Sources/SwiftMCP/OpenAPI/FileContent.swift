@@ -9,7 +9,9 @@
 import Foundation
 
 /// Contents of a File to be returned by a tool call
+#if SKETCH_USE_SWIFT_MACROS
 @Schema
+#endif
 public struct FileContent: Codable, Sendable {
     /// The name of the file
     public let name: String

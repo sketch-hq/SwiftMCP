@@ -1,10 +1,14 @@
 import Foundation
 
 /// Represents model preferences for sampling requests.
+#if SKETCH_USE_SWIFT_MACROS
 @Schema
+#endif
 public struct ModelPreferences: Codable, Sendable {
     /// Model hints for preference matching.
+    #if SKETCH_USE_SWIFT_MACROS
     @Schema
+    #endif
     public struct ModelHint: Codable, Sendable {
         /// The name or partial name of the model to prefer.
         public let name: String
