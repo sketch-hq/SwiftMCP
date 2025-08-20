@@ -49,6 +49,13 @@ final class HTTPHandler: NSObject, ChannelInboundHandler, Identifiable, @uncheck
             case (.body(let buffer), .head(let head)):
                 requestState = .body(head: head, data: buffer)
 
+            // BODY Received after BODY
+            case (.body(let newBuffer), .body(let head, let oldBuffer)):
+                var accumulator = context.channel.allocator.buffer(capacity: oldBuffer.readableBytes + newBuffer.readableBytes)
+                accumulator.writeImmutableBuffer(oldBuffer)
+                accumulator.writeImmutableBuffer(newBuffer)
+                requestState = .body(head: head, data: accumulator)
+
             // BODY Received in an unexpected state
             case (.body, _):
                 logger.warning("Received unexpected body without a valid head")
