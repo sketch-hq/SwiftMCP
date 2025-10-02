@@ -1,6 +1,9 @@
 #if canImport(Glibc)
 @preconcurrency import Glibc
 #endif
+#if os(macOS)
+import UniformTypeIdentifiers
+#endif
 
 import Foundation
 import AnyCodable
@@ -324,10 +327,28 @@ public extension MCPServer {
 
             if let resource = result as? MCPResourceContent {
                 // Handle MCPResourceContent type
-                content = [
-					"type": "resource",
-					"resource": resource
-				]
+                let isImageResource: Bool
+                #if os(macOS)
+                if let mimeType = resource.mimeType, let utType = UTType(mimeType: mimeType), utType.conforms(to: .image) {
+                    isImageResource = true
+                } else {
+                    isImageResource = false
+                }
+                #else
+                isImageResource = resource.mimeType?.starts(with: "image") == true
+                #endif
+                if isImageResource {
+                    content = [
+                        "type": "image",
+                        "mimeType": resource.mimeType,
+                        "data": resource.blob?.base64EncodedString(),
+                    ]
+                } else {
+                    content = [
+                        "type": "resource",
+                        "resource": resource
+                    ]
+                }
             } else {
                 let encoder = JSONEncoder()
 
