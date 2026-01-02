@@ -283,7 +283,7 @@ public extension MCPServer {
         )
 
         let result = InitializeResult(
-            protocolVersion: "2025-06-18",
+            protocolVersion: "2024-11-05",
             capabilities: capabilities,
             serverInfo: serverInfo
         )
